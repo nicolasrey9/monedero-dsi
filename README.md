@@ -27,6 +27,15 @@ Tenés seis tareas:
     *  [Entrada de Blog (en inglés)](https://www.baeldung.com/junit-5-migration)
     *  [Entrada de Blog (en español)](https://www.paradigmadigital.com/dev/nos-espera-junit-5/)
 * Maven 3.3 o superior
+
+### Code Smells Detectados
+* Type Test con `esDeposito en movimiento`, aunque no me parece tan grave porque no es muy diferencial. Pero se podria solucionar con polimorfismo.
+* Codigo duplicado con las validaciones de `MontoNegativoException` y `SaldoMenorException`
+* `movimiento.getFecha().equals(fecha)` esto deberia ser responsabilidad del movimiento, en `getMontoExtraidoA`
+* Al tener mucha logica sobre la `lista de movimiento``, esta se podria delegar en una Clase que posea esta logica.
+* Los valores de `limite` de `MaximoExtraccionDiarioException` y de `MaximaCantidadDepositos` deberian ser parametrizados por si cambian
+* Algunos de los tests no tienen asserts
+* Los mensajes de `agregateA` y `calcularValor` del movimiento siento que son responsabilidad de la Cuenta. Pero capaz estoy errado.
  
 
   
