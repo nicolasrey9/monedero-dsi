@@ -80,4 +80,9 @@ public class Cuenta {
     this.saldo = saldo;
   }
 
+  // metodo/s agregado para tests
+  public int cantidadDeMovimientos() {
+    return this.getMovimientos().size();
+  }
+
 }
