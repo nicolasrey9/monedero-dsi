@@ -12,7 +12,7 @@ import java.util.List;
 public class Cuenta {
 
   private double saldo = 0;
-  private List<Movimiento> movimientos = new ArrayList<>();
+  private final Movimientos movimientos = new Movimientos();
 
   public Cuenta() {
     saldo = 0;
@@ -25,9 +25,7 @@ public class Cuenta {
   public void poner(double cuanto) {
     this.validarMontoPositivo(cuanto);
 
-    if (getMovimientos().stream()
-        .filter(movimiento -> movimiento.fueDepositado(LocalDate.now()))
-        .count() >= 3) {  // el 3 deberia estar parametrizado?
+    if (this.movimientos.cantidadDeMovimientosDe(LocalDate.now()) >= 3) {  // el 3 deberia estar parametrizado?
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
 
@@ -38,7 +36,7 @@ public class Cuenta {
     this.validarMontoPositivo(cuanto);
     this.validarMontoExtraible(cuanto);
 
-    var montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
+    var montoExtraidoHoy = movimientos.montoExtraidoA(LocalDate.now());
     var limite = 1000 - montoExtraidoHoy; // 1000 deberia ser parametrizado
     if (cuanto > limite) {
       throw new MaximoExtraccionDiarioException(
@@ -64,20 +62,6 @@ public class Cuenta {
     }
   }
 
-  public double getMontoExtraidoA(LocalDate fecha) {
-    return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.esDeLaFecha(fecha))
-        .mapToDouble(Movimiento::getMonto)
-        .sum();
-  }
-
-  public List<Movimiento> getMovimientos() {
-    return movimientos;
-  }
-
-  public void setMovimientos(List<Movimiento> movimientos) {
-    this.movimientos = movimientos;
-  }
 
   public double getSaldo() {
     return saldo;
@@ -89,7 +73,10 @@ public class Cuenta {
 
   // metodo/s agregado para tests
   public int cantidadDeMovimientos() {
-    return this.getMovimientos().size();
+    return this.movimientos.cantidad();
   }
 
+  public double getMontoExtraidoA(LocalDate fecha) {
+    return this.movimientos.montoExtraidoA(fecha);
+  }
 }
