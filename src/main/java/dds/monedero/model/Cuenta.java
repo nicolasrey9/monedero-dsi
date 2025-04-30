@@ -36,9 +36,8 @@ public class Cuenta {
 
   public void sacar(double cuanto) {
     this.validarMontoPositivo(cuanto);
-    if (getSaldo() - cuanto < 0) {
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
-    }
+    this.validarMontoExtraible(cuanto);
+
     var montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     var limite = 1000 - montoExtraidoHoy; // 1000 deberia ser parametrizado
     if (cuanto > limite) {
@@ -53,8 +52,14 @@ public class Cuenta {
     movimientos.add(movimiento);
   }
 
-  private void validarMontoPositivo(double cuanto) {
-    if (getSaldo() - cuanto < 0) {
+  private void validarMontoPositivo(double monto) {
+    if (monto < 0) {
+      throw new MontoNegativoException("No puede sacar una cantidad negativa");
+    }
+  }
+
+  private void validarMontoExtraible(double monto) {
+    if (monto > getSaldo()) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
   }
