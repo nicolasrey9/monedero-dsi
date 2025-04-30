@@ -6,13 +6,13 @@ import dds.monedero.exceptions.MontoNegativoException;
 import dds.monedero.exceptions.SaldoMenorException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Cuenta {
 
   private double saldo = 0;
   private final Movimientos movimientos = new Movimientos();
+  private double limite = 1000;
 
   public Cuenta() {
     saldo = 0;
@@ -26,26 +26,30 @@ public class Cuenta {
     this.validarMontoPositivo(cuanto);
     this.validarCantidadDeDepositosDeHoy();
 
-    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, true);
-    movimiento.impactarSaldo(this);
-    this.addMovimiento(movimiento);
+    this.crearMovimiento(cuanto, true);
   }
 
   public void sacar(double cuanto) {
     this.validarMontoPositivo(cuanto);
     this.validarMontoExtraible(cuanto);
+    this.validarMaximoDeExtraccionDiario(cuanto);
 
-    var montoExtraidoHoy = movimientos.montoExtraidoA(LocalDate.now());
-    var limite = 1000 - montoExtraidoHoy; // 1000 deberia ser parametrizado
-    if (cuanto > limite) {
-      throw new MaximoExtraccionDiarioException(
-          "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + limite);
-    }
+    this.crearMovimiento(cuanto, false);
+  }
 
-    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, false);
+  private void crearMovimiento(double monto, boolean esDeposito) {
+    Movimiento movimiento = new Movimiento(LocalDate.now(), monto, esDeposito);
     movimiento.impactarSaldo(this);
     this.addMovimiento(movimiento);
+  }
 
+  private void validarMaximoDeExtraccionDiario(double monto) {
+    var montoExtraidoHoy = movimientos.montoExtraidoA(LocalDate.now());
+    var maximaExtraccionPosible = this.limite - montoExtraidoHoy;
+    if (monto > maximaExtraccionPosible) {
+      throw new MaximoExtraccionDiarioException(
+          "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + maximaExtraccionPosible);
+    }
   }
 
   public void addMovimiento(Movimiento movimiento) {
