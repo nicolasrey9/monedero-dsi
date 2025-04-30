@@ -13,6 +13,7 @@ public class Cuenta {
   private double saldo = 0;
   private final Movimientos movimientos = new Movimientos();
   private double limite = 1000;
+  private int maximaCantidadDepositos = 3;
 
   public Cuenta() {
     saldo = 0;
@@ -48,7 +49,7 @@ public class Cuenta {
     var maximaExtraccionPosible = this.limite - montoExtraidoHoy;
     if (monto > maximaExtraccionPosible) {
       throw new MaximoExtraccionDiarioException(
-          "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + maximaExtraccionPosible);
+          "No puede extraer mas de $ " + this.limite + " diarios, " + "límite: " + maximaExtraccionPosible);
     }
   }
 
@@ -69,8 +70,8 @@ public class Cuenta {
   }
 
   private void validarCantidadDeDepositosDeHoy() {
-    if (this.movimientos.cantidadDeDepositosDe(LocalDate.now()) >= 3) {  // el 3 deberia estar parametrizado?
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+    if (this.movimientos.cantidadDeDepositosDe(LocalDate.now()) >= this.maximaCantidadDepositos) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + this.maximaCantidadDepositos + " depositos diarios");
     }
   }
 
