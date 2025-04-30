@@ -26,7 +26,9 @@ public class Cuenta {
     this.validarMontoPositivo(cuanto);
     this.validarCantidadDeDepositosDeHoy();
 
-    this.addMovimiento(new Movimiento(LocalDate.now(), cuanto, true));
+    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, true);
+    movimiento.impactarSaldo(this);
+    this.addMovimiento(movimiento);
   }
 
   public void sacar(double cuanto) {
@@ -39,7 +41,11 @@ public class Cuenta {
       throw new MaximoExtraccionDiarioException(
           "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + limite);
     }
-    this.addMovimiento(new Movimiento(LocalDate.now(), cuanto, false));
+
+    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, false);
+    movimiento.impactarSaldo(this);
+    this.addMovimiento(movimiento);
+
   }
 
   public void addMovimiento(Movimiento movimiento) {

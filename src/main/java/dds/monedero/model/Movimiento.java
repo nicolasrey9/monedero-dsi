@@ -52,4 +52,8 @@ public class Movimiento {
       return cuenta.getSaldo() - getMonto();
     }
   }
+
+  public void impactarSaldo(Cuenta cuenta) {
+    cuenta.setSaldo(calcularValor(cuenta));
+  }
 }
