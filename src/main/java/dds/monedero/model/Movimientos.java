@@ -15,7 +15,7 @@ public class Movimientos {
     return this.movimientos.size();
   }
 
-  public int cantidadDeMovimientosDe(LocalDate date) {
+  public int cantidadDeDepositosDe(LocalDate date) {
     return (int) movimientos.stream().filter(movimiento -> movimiento.fueDepositado(date)).count();
   }
 

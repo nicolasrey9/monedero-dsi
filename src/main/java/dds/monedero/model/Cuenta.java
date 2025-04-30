@@ -24,10 +24,7 @@ public class Cuenta {
 
   public void poner(double cuanto) {
     this.validarMontoPositivo(cuanto);
-
-    if (this.movimientos.cantidadDeMovimientosDe(LocalDate.now()) >= 3) {  // el 3 deberia estar parametrizado?
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
-    }
+    this.validarCantidadDeDepositosDeHoy();
 
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
@@ -59,6 +56,12 @@ public class Cuenta {
   private void validarMontoExtraible(double monto) {
     if (monto > getSaldo()) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
+    }
+  }
+
+  private void validarCantidadDeDepositosDeHoy() {
+    if (this.movimientos.cantidadDeDepositosDe(LocalDate.now()) >= 3) {  // el 3 deberia estar parametrizado?
+      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
   }
 
