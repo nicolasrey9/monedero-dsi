@@ -38,16 +38,8 @@ public class Movimiento {
   }
 
 
-  public double calcularValor(Cuenta cuenta) {
-    if (this.isDeposito()) {
-      return cuenta.getSaldo() + getMonto();
-    } else {
-      return cuenta.getSaldo() - getMonto();
-    }
-  }
-
   public void impactarSaldo(Cuenta cuenta) {
-    cuenta.setSaldo(calcularValor(cuenta));
+    cuenta.setSaldo(tipoMovimiento.calcularNuevoSaldo(cuenta, this.getMonto()));
   }
 
 }
