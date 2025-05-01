@@ -21,7 +21,7 @@ public class Movimientos {
 
   public double montoExtraidoA(LocalDate fecha) {
     return this.movimientos.stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.esDeLaFecha(fecha))
+        .filter(movimiento -> movimiento.fueExtraido(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }

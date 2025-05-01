@@ -4,32 +4,25 @@ import java.time.LocalDate;
 
 public class Movimiento {
   private LocalDate fecha;
-  // Nota: En ningún lenguaje de programación usen jamás doubles (es decir, números con punto flotante) para modelar dinero en el mundo real.
-  // En su lugar siempre usen numeros de precision arbitraria o punto fijo, como BigDecimal en Java y similares
-  // De todas formas, NO es necesario modificar ésto como parte de este ejercicio. 
   private final double monto;
-  private final boolean esDeposito;
+  private TipoMovimiento tipoMovimiento;
 
-  public Movimiento(LocalDate fecha, double monto, boolean esDeposito) {
+  public Movimiento(LocalDate fecha, double monto, TipoMovimiento tipoMovimiento) {
     this.fecha = fecha;
     this.monto = monto;
-    this.esDeposito = esDeposito;
+    this.tipoMovimiento = tipoMovimiento;
   }
 
   public double getMonto() {
     return monto;
   }
 
-  public LocalDate getFecha() {
-    return fecha;
-  }
-
   public boolean fueDepositado(LocalDate fecha) {
-    return isDeposito() && esDeLaFecha(fecha);
+    return this.isDeposito() && esDeLaFecha(fecha);
   }
 
   public boolean fueExtraido(LocalDate fecha) {
-    return isExtraccion() && esDeLaFecha(fecha);
+    return this.isExtraccion() && esDeLaFecha(fecha);
   }
 
   public boolean esDeLaFecha(LocalDate fecha) {
@@ -37,16 +30,16 @@ public class Movimiento {
   }
 
   public boolean isDeposito() {
-    return esDeposito;
+    return this.tipoMovimiento.equals(TipoMovimiento.DEPOSITO);
   }
 
   public boolean isExtraccion() {
-    return !esDeposito;
+    return this.tipoMovimiento.equals(TipoMovimiento.EXTRACCION);
   }
 
 
   public double calcularValor(Cuenta cuenta) {
-    if (esDeposito) {
+    if (this.isDeposito()) {
       return cuenta.getSaldo() + getMonto();
     } else {
       return cuenta.getSaldo() - getMonto();
@@ -56,4 +49,5 @@ public class Movimiento {
   public void impactarSaldo(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
   }
+
 }

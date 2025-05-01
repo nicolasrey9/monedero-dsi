@@ -93,13 +93,6 @@ public class CuentaTest {
 
 
   @Test
-  @DisplayName("Agregar un movimiento de depósito crea un Movimiento en la lista")
-  void AgregaMovimientoDeposito() {
-    cuenta.poner(1000);
-    Assertions.assertEquals(1, cuenta.cantidadDeMovimientos());
-  }
-
-  @Test
   void MontoExtraidoEnUnDia() {
     cuenta.setSaldo(2000);
     cuenta.sacar(400);

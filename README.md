@@ -36,6 +36,7 @@ Tenés seis tareas:
 * Los valores de `limite` de `MaximoExtraccionDiarioException` y de `MaximaCantidadDepositos` deberian ser parametrizados por si cambian
 * Algunos de los tests no tienen asserts
 * Los mensajes de `agregateA` y `calcularValor` del movimiento siento que son responsabilidad de la Cuenta. Pero capaz estoy errado.
+* Se usa un booleano para representar si un movimiento esDeposito, lo cual puede traer problemas si surge un nuevo tipo de movimiento
  
 
   
